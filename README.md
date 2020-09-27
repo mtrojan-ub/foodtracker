@@ -12,3 +12,4 @@ Here are some feature ideas:
 - Statistics (daily, weekly, ...)
 - Recommendations (missing nutrients for today, which evening meal to cook to match remaining RDA's for today)
 - Profiles for different target audiences (gender, age, etc.)
+    - Profile settings for intolerances, warning if food in protocol contains intolerance
