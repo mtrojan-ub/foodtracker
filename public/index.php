@@ -19,10 +19,27 @@ require('../inc.php');
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item"><a class="nav-link" href="?page=home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="?page=ingredients">Ingredients</a></li>
-                    <li class="nav-item"><a class="nav-link" href="?page=nutrients">Nutrients</a></li>
-                    <li class="nav-item"><a class="nav-link" href="?page=profiles">Profiles</a></li>
-                    <li class="nav-item"><a class="nav-link" href="?page=nutrients_per_profile">Nutrients per Profile</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPersonal" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Personal
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownPersonal">
+                            <a class="dropdown-item" href="?page=protocol">Protocol</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBasics" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Basics
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownBasics">
+                            <a class="dropdown-item" href="?page=foods">Foods</a>
+                            <a class="dropdown-item" href="?page=nutrients">Nutrients</a>
+                            <a class="dropdown-item" href="?page=profiles">Profiles</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="?page=nutrients_per_profile">Nutrients per Profile</a>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="?page=help">Help</a></li>
                 </ul>
             </div>
         </nav>

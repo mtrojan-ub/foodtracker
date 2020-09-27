@@ -3,12 +3,12 @@ namespace Foodtracker;
 $id = $_GET['id'] ?? null;
 if (!isset($id))
     die('missing id');
-$ingredient = DB::GetIngredient($id);
+$food = DB::GetFood($id);
 $nutrients = DB::GetNutrientsForIngredient($id);
 ?>
 
-<h1><?=$ingredient['name']?></h1>
-<table>
+<h1><?=$food['name']?></h1>
+<table class="table">
     <tr>
         <th>Nutrient</th>
         <th>Amount / 100g</th>

@@ -4,7 +4,7 @@ $profiles = DB::GetProfiles();
 ?>
 
 <h1>Profiles</h1>
-<table>
+<table class="table">
     <tr>
         <th>Gender</th>
         <th>Min Age</th>

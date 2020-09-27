@@ -19,23 +19,23 @@ class DB {
         }
     }
 
-    static public function GetIngredient($id): array {
-        return self::Select('SELECT * FROM ingredients WHERE id=' . $id)[0];
+    static public function GetFood($id): array {
+        return self::Select('SELECT * FROM foods WHERE id=' . $id)[0];
     }
 
-    static public function GetIngredients(): array {
-        return self::Select('SELECT * FROM ingredients');
+    static public function GetFoods(): array {
+        return self::Select('SELECT * FROM foods');
     }
 
     static public function GetNutrients(): array {
         return self::Select('SELECT * FROM nutrients');
     }
 
-    static public function GetNutrientsForIngredient($ingredientId): array {
-        $query = 'SELECT * FROM ingredients '
-               . 'LEFT JOIN ingredient_nutrients ON ingredients.id = ingredient_nutrients.id_ingredient '
-               . 'LEFT JOIN nutrients ON nutrients.id = ingredient_nutrients.id_nutrient '
-               . 'WHERE ingredients.id=' . $ingredientId;
+    static public function GetFoodNutrients($foodId): array {
+        $query = 'SELECT * FROM foods '
+               . 'LEFT JOIN food_nutrients ON foods.id = food_nutrients.id_food '
+               . 'LEFT JOIN nutrients ON nutrients.id = food_nutrients.id_nutrient '
+               . 'WHERE foods.id=' . $foodId;
         return self::Select($query);
     }
 

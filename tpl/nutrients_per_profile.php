@@ -3,7 +3,7 @@ namespace Foodtracker;
 ?>
 
 <h1>Nutrients per Profile</h1>
-<table>
+<table class="table">
     <?php $profiles = DB::GetProfiles();?>
     <tr>
         <th>Nutrient</th>

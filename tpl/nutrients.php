@@ -4,7 +4,7 @@ $nutrients = DB::GetNutrients();
 ?>
 
 <h1>Nutrients</h1>
-<table>
+<table class="table">
     <tr>
         <th>Name</th>
         <th>Unit</th>
