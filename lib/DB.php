@@ -43,9 +43,28 @@ class DB {
         return self::Select('SELECT * FROM profiles');
     }
 
+    static public function GetProtocolForUser($userId): array {
+        return self::Select('SELECT * FROM protocols ' .
+                            'LEFT JOIN foods ON foods.id=protocols.id_food ' .
+                            'WHERE id_user=' . $userId);
+    }
+
+    static public function GetProtocolNutrientsForUser($userId): array {
+        return self::Select('SELECT *, SUM(ROUND(food_nutrients.amount *(protocols.amount / 100),3)) AS real_amount FROM protocols ' .
+                            'RIGHT JOIN foods ON protocols.id_food = foods.id ' .
+                            'RIGHT JOIN food_nutrients ON food_nutrients.id_food = foods.id ' .
+                            'RIGHT JOIN nutrients ON nutrients.id = food_nutrients.id_nutrient ' .
+                            'WHERE protocols.id_user=' . $userId . ' ' .
+                            'GROUP BY nutrients.name');
+    }
+
     static public function GetRDA($profileId, $nutrientId): ?array {
         $rdas = self::Select('SELECT * FROM rdas LEFT JOIN nutrients ON rdas.id_nutrient = nutrients.id ' .
                              'WHERE id_profile=' . $profileId . ' AND id_nutrient=' . $nutrientId);
         return $rdas[0] ?? null;
+    }
+
+    static public function GetUser($userId): array {
+        return self::Select('SELECT * FROM users WHERE id=' . $userId);
     }
 }
