@@ -32,8 +32,8 @@ require('../inc.php');
                             Basics
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownBasics">
-                            <a class="dropdown-item" href="?page=foods">Foods</a>
                             <a class="dropdown-item" href="?page=nutrients">Nutrients</a>
+                            <a class="dropdown-item" href="?page=foods">Foods</a>
                             <a class="dropdown-item" href="?page=profiles">Profiles</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="?page=nutrients_per_profile">Nutrients per Profile</a>

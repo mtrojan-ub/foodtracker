@@ -50,11 +50,14 @@ class DB {
     }
 
     static public function GetProtocolNutrientsForUser($userId): array {
+        $user = self::GetUser($userId);
         return self::Select('SELECT *, SUM(ROUND(food_nutrients.amount *(protocols.amount / 100),3)) AS real_amount FROM protocols ' .
                             'RIGHT JOIN foods ON protocols.id_food = foods.id ' .
                             'RIGHT JOIN food_nutrients ON food_nutrients.id_food = foods.id ' .
                             'RIGHT JOIN nutrients ON nutrients.id = food_nutrients.id_nutrient ' .
+                            'LEFT JOIN rdas ON rdas.id_nutrient = nutrients.id ' .
                             'WHERE protocols.id_user=' . $userId . ' ' .
+                            'AND rdas.id_profile=' . $user['id_profile'] . ' ' .
                             'GROUP BY nutrients.name');
     }
 
@@ -65,6 +68,6 @@ class DB {
     }
 
     static public function GetUser($userId): array {
-        return self::Select('SELECT * FROM users WHERE id=' . $userId);
+        return self::Select('SELECT * FROM users WHERE id=' . $userId)[0];
     }
 }

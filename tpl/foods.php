@@ -11,7 +11,7 @@ $foods = DB::GetFoods();
     </tr>
     <?php foreach ($foods as $food):?>
         <tr>
-            <td><a href="?page=food_nutrients&id="<?=$food['id']?>><?=$food['name']?></a></td>
+            <td><a href="?page=food_nutrients&id=<?=$food['id']?>"><?=$food['name']?></a></td>
             <td><?=$food['kcal']?></td>
         </tr>
     <?php endforeach;?>

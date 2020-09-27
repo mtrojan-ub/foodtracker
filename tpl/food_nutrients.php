@@ -4,7 +4,7 @@ $id = $_GET['id'] ?? null;
 if (!isset($id))
     die('missing id');
 $food = DB::GetFood($id);
-$nutrients = DB::GetNutrientsForIngredient($id);
+$nutrients = DB::GetFoodNutrients($id);
 ?>
 
 <h1><?=$food['name']?></h1>
