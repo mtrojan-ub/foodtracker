@@ -55,9 +55,12 @@ $nutrients = DB::GetProtocolNutrientsForUser(1);
                     $color = 'orange';
                 else if ($rdaPercent > 125)
                     $color = '#EEEE00'; // dark yellow for better readibility
+
+                $aNutrientStart = ($nutrient['external_id_dge'] != '') ? '<a href="//www.dge.de/wissenschaft/referenzwerte/'.$nutrient['external_id_dge'].'" target="_blank">' : '';
+                $aNutrientEnd = ($nutrient['external_id_dge'] != '') ? '</a>' : '';
             ?>
             <tr>
-                <td><?=$nutrient['name']?></td>
+                <td><?=$aNutrientStart?><?=$nutrient['name']?><?=$aNutrientEnd?></td>
                 <td style="color: <?=$color?>"><?=$nutrient['real_amount'] . $nutrient['unit']?></td>
                 <td style="color: <?=$color?>"><?=$rdaPercent?></td>
                 <td style="color: <?=$color?>"><?=$rdaDiffDisplay . $nutrient['unit']?></td>
