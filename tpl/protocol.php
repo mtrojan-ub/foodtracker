@@ -74,7 +74,8 @@ $nutrients = DB::GetProtocolNutrientsForUser(1);
 <script>
     $(document).ready( function () {
         $('#nutrientsTable').DataTable({
-            paging: false
+            paging: false,
+            order: [[ 2, "desc" ]]
         });
     });
 </script>

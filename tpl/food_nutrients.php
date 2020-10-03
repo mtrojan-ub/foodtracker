@@ -8,6 +8,7 @@ $nutrients = DB::GetFoodNutrients($id);
 ?>
 
 <h1><?=$food['name']?></h1>
+<h2><?=$food['kcal']?>kcal / 100g</h2>
 <table class="table">
     <tr>
         <th>Nutrient</th>
