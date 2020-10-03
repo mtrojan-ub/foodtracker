@@ -28,7 +28,7 @@ class DB {
     }
 
     static public function GetNutrients(): array {
-        return self::Select('SELECT * FROM nutrients');
+        return self::Select('SELECT * FROM nutrients ORDER BY name ASC');
     }
 
     static public function GetFoodNutrients($foodId): array {

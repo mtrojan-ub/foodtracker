@@ -39,17 +39,22 @@ $nutrients = DB::GetProtocolNutrientsForUser(1);
             <?php
                 $rdaDiff = $nutrient['value'] - $nutrient['real_amount'];
                 $rdaDiffDisplay = $nutrient['real_amount'] - $nutrient['value'];
-                $rdaDiffAllowed = $nutrient['value'] * 0.1;
-                $rdaMinValue = $nutrient['value'] - $rdaDiffAllowed;
-                $rdaMaxValue = $nutrient['value'] + $rdaDiffAllowed;
                 $rdaPercent = round(($nutrient['real_amount'] / $nutrient['value']) * 100);
 
-                if ($nutrient['real_amount'] < $rdaMinValue)
+                if ($rdaPercent < 25)
                     $color = 'red';
-                else if ($nutrient['real_amount'] > $rdaMaxValue)
-                    $color = 'yellow';
-                else
-                    $color = 'black';
+                else if ($rdaPercent < 50)
+                    $color = 'orange';
+                else if ($rdaPercent < 75)
+                    $color = '#EEEE00'; // dark yellow for better readibility
+                else if ($rdaPercent < 125)
+                    $color = 'green';
+                else if ($rdaPercent > 175)
+                    $color = 'red';
+                else if ($rdaPercent > 150)
+                    $color = 'orange';
+                else if ($rdaPercent > 125)
+                    $color = '#EEEE00'; // dark yellow for better readibility
             ?>
             <tr>
                 <td><?=$nutrient['name']?></td>
