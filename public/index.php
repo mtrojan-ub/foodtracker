@@ -6,9 +6,11 @@ require('../inc.php');
 <html>
     <head>
         <link rel="stylesheet" href="res/bootstrap.min.css">
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
         <script src="res/jquery-3.5.1.slim.min.js"></script>
         <script src="res/popper.min.js"></script>
         <script src="res/bootstrap.min.js"></script>
+        <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
