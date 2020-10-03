@@ -46,7 +46,8 @@ class DB {
     static public function GetProtocolForUser($userId): array {
         return self::Select('SELECT * FROM protocols ' .
                             'LEFT JOIN foods ON foods.id=protocols.id_food ' .
-                            'WHERE id_user=' . $userId);
+                            'WHERE id_user=' . $userId . ' ' .
+                            'ORDER BY protocols.date ASC, protocols.time ASC');
     }
 
     static public function GetProtocolNutrientsForUser($userId): array {
