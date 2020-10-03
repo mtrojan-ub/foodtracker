@@ -44,16 +44,24 @@ class DB {
     }
 
     static public function GetProtocolForUser($userId): array {
-        return self::Select('SELECT * FROM protocols ' .
+        return self::Select('SELECT *, foods.kcal * protocols.amount / 100 AS real_kcal FROM protocols ' .
                             'LEFT JOIN foods ON foods.id=protocols.id_food ' .
                             'WHERE id_user=' . $userId . ' ' .
                             'ORDER BY protocols.date ASC, protocols.time ASC');
     }
 
+    static public function GetProtocolCaloriesForUser($userId): int {
+        $rows = self::Select('SELECT *, SUM(foods.kcal * protocols.amount / 100) AS real_kcal FROM protocols ' .
+                             'LEFT JOIN foods ON protocols.id_food = foods.id ' .
+                             'WHERE protocols.id_user=' . $userId);
+
+        return $rows[0]['real_kcal'] ?? 0;
+    }
+
     static public function GetProtocolNutrientsForUser($userId): array {
         $user = self::GetUser($userId);
         return self::Select('SELECT *, SUM(ROUND(food_nutrients.amount *(protocols.amount / 100),3)) AS real_amount FROM protocols ' .
-                            'RIGHT JOIN foods ON protocols.id_food = foods.id ' .
+                            'LEFT JOIN foods ON protocols.id_food = foods.id ' .
                             'RIGHT JOIN food_nutrients ON food_nutrients.id_food = foods.id ' .
                             'RIGHT JOIN nutrients ON nutrients.id = food_nutrients.id_nutrient ' .
                             'LEFT JOIN rdas ON rdas.id_nutrient = nutrients.id ' .
@@ -69,6 +77,8 @@ class DB {
     }
 
     static public function GetUser($userId): array {
-        return self::Select('SELECT * FROM users WHERE id=' . $userId)[0];
+        return self::Select('SELECT * FROM users ' .
+                            'LEFT JOIN profiles ON users.id_profile = profiles.id ' .
+                            'WHERE users.id=' . $userId)[0];
     }
 }

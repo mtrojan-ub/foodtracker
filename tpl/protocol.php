@@ -1,7 +1,9 @@
 <?php
 namespace Foodtracker;
-$protocols = DB::GetProtocolForUser(1);
-$nutrients = DB::GetProtocolNutrientsForUser(1);
+$user = DB::GetUser(1);
+$protocols = DB::GetProtocolForUser($user['id']);
+$nutrients = DB::GetProtocolNutrientsForUser($user['id']);
+$calories = DB::GetProtocolCaloriesForUser($user['id']);
 ?>
 
 <h1>Protocol</h1>
@@ -12,6 +14,7 @@ $nutrients = DB::GetProtocolNutrientsForUser(1);
         <th>Time</th>
         <th>Food</th>
         <th>Amount</th>
+        <th>kcal</th>
     </tr>
     <?php foreach ($protocols as $protocol):?>
     <tr>
@@ -19,11 +22,19 @@ $nutrients = DB::GetProtocolNutrientsForUser(1);
         <td><?=$protocol['time']?></td>
         <td><a href="?page=food_nutrients&id=<?=$protocol['id']?>"><?=$protocol['name']?></a></td>
         <td><?=$protocol['amount']?></td>
+        <td><?=round($protocol['real_kcal'])?></td>
     </tr>
     <?php endforeach; ?>
 </table>
 
 <h2>Nutrients</h2>
+<?php
+    if ($calories < $user['kcal'])
+        $color = 'green';
+    else
+        $color = '#EEEE00'; // dark yellow for better readibility
+?>
+<h3 style="color: <?=$color?>"><?=$calories?> / <?=$user['kcal']?>kcal</h3>
 <table id="nutrientsTable" class="table">
     <thead>
         <tr>
@@ -60,11 +71,11 @@ $nutrients = DB::GetProtocolNutrientsForUser(1);
                 $aNutrientEnd = ($nutrient['external_id_dge'] != '') ? '</a>' : '';
             ?>
             <tr>
-                <td><?=$aNutrientStart?><?=$nutrient['name']?><?=$aNutrientEnd?></td>
+                <td><?=$nutrient['name']?></td>
                 <td style="color: <?=$color?>"><?=$nutrient['real_amount'] . $nutrient['unit']?></td>
                 <td style="color: <?=$color?>"><?=$rdaPercent?></td>
                 <td style="color: <?=$color?>"><?=$rdaDiffDisplay . $nutrient['unit']?></td>
-                <td><?=$nutrient['value'] . $nutrient['unit']?></td>
+                <td><?=$aNutrientStart?><?=$nutrient['value'] . $nutrient['unit']?><?=$aNutrientEnd?></td>
             </tr>
         <?php endforeach;?>
     </tbody>
