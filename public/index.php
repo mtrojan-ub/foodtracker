@@ -41,7 +41,6 @@ require('../inc.php');
                             <a class="dropdown-item" href="?page=nutrients_per_profile">Nutrients per Profile</a>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="?page=help">Help</a></li>
                 </ul>
             </div>
         </nav>
