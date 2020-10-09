@@ -21,7 +21,7 @@ $calories = DB::GetProtocolCaloriesForUser($user['id']);
         <td><?=$protocol['date']?></td>
         <td><?=$protocol['time']?></td>
         <td><a href="?page=food_nutrients&id=<?=$protocol['id']?>"><?=$protocol['name']?></a></td>
-        <td><?=$protocol['amount']?></td>
+        <td><?=$protocol['amount'] . $protocol['unit_default']?></td>
         <td><?=round($protocol['real_kcal'])?></td>
     </tr>
     <?php endforeach; ?>
@@ -67,15 +67,15 @@ $calories = DB::GetProtocolCaloriesForUser($user['id']);
                 else if ($rdaPercent > 125)
                     $color = '#EEEE00'; // dark yellow for better readibility
 
-                $aNutrientStart = ($nutrient['external_id_dge'] != '') ? '<a href="//www.dge.de/wissenschaft/referenzwerte/'.$nutrient['external_id_dge'].'" target="_blank">' : '';
-                $aNutrientEnd = ($nutrient['external_id_dge'] != '') ? '</a>' : '';
+                $aRDAStart = ($nutrient['external_id_dge'] != '') ? '<a href="//www.dge.de/wissenschaft/referenzwerte/'.$nutrient['external_id_dge'].'" target="_blank">' : '';
+                $aRDAEnd = ($nutrient['external_id_dge'] != '') ? '</a>' : '';
             ?>
             <tr>
-                <td><?=$nutrient['name']?></td>
+                <td><?=ViewHelper::GetNutrientCaption($nutrient)?></td>
                 <td style="color: <?=$color?>"><?=$nutrient['real_amount'] . $nutrient['unit']?></td>
                 <td style="color: <?=$color?>"><?=$rdaPercent?></td>
                 <td style="color: <?=$color?>"><?=$rdaDiffDisplay . $nutrient['unit']?></td>
-                <td><?=$aNutrientStart?><?=$nutrient['value'] . $nutrient['unit']?><?=$aNutrientEnd?></td>
+                <td><?=$aRDAStart?><?=$nutrient['value'] . $nutrient['unit']?><?=$aRDAEnd?></td>
             </tr>
         <?php endforeach;?>
     </tbody>

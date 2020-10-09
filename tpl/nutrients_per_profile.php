@@ -17,7 +17,7 @@ namespace Foodtracker;
     foreach ($nutrients as $nutrient) {
         ?>
         <tr>
-            <td><?=$nutrient['name']?></td>
+            <td><?=ViewHelper::GetNutrientCaption($nutrient)?></td>
             <?php foreach ($profiles as $profile):?>
                 <td>
                     <?php $rda = DB::GetRDA($profile['id'], $nutrient['id']);?>

@@ -11,7 +11,7 @@ $nutrients = DB::GetNutrients();
     </tr>
     <?php foreach ($nutrients as $nutrient):?>
         <tr>
-            <td><?=$nutrient['name']?></td>
+            <td><?=ViewHelper::GetNutrientCaption($nutrient)?></td>
             <td><?=$nutrient['unit']?></td>
         </tr>
     <?php endforeach;?>
