@@ -1,12 +1,19 @@
 <?php
 namespace Foodtracker;
 $user = DB::GetUser(1);
-$protocols = DB::GetProtocolForUser($user['id']);
-$nutrients = DB::GetProtocolNutrientsForUser($user['id']);
-$calories = DB::GetProtocolCaloriesForUser($user['id']);
+$date = $_GET['date'] ?? DB::GetProtocolLatestDateForUser($user['id']);
+$protocols = DB::GetProtocolForUser($user['id'], $date);
+$calories = DB::GetProtocolCaloriesForUser($user['id'], $date);
+$nutrients = DB::GetProtocolNutrientsForUser($user['id'], $date);
+
 ?>
 
 <h1>Protocol</h1>
+<form method="get">
+    <input type="hidden" name="page" value="protocol">
+    Date:&nbsp;<input name="date" value="<?=$date?>"><input type="submit">
+</form>
+
 <h2>Foods</h2>
 <table class="table">
     <tr>

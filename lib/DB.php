@@ -52,31 +52,51 @@ class DB {
         return self::Select('SELECT * FROM profiles');
     }
 
-    static public function GetProtocolForUser($userId): array {
-        return self::Select('SELECT *, foods.kcal * protocols.amount / 100 AS real_kcal FROM protocols ' .
-                            'LEFT JOIN foods ON foods.id=protocols.id_food ' .
-                            'WHERE id_user=' . self::Escape($userId) . ' ' .
-                            'ORDER BY protocols.date ASC, protocols.time ASC');
+    static public function GetProtocolForUser($userId, $date=null): array {
+        $query = 'SELECT *, foods.kcal * protocols.amount / 100 AS real_kcal FROM protocols ' .
+                 'LEFT JOIN foods ON foods.id=protocols.id_food ' .
+                 'WHERE id_user=' . self::Escape($userId) . ' ';
+
+        if ($date !== null)
+            $query .= 'AND protocols.date = "' . self::Escape($date) . '" ';
+
+        $query .= 'ORDER BY protocols.date ASC, protocols.time ASC';
+        return self::Select($query);
     }
 
-    static public function GetProtocolCaloriesForUser($userId): int {
-        $rows = self::Select('SELECT *, SUM(foods.kcal * protocols.amount / 100) AS real_kcal FROM protocols ' .
-                             'LEFT JOIN foods ON protocols.id_food = foods.id ' .
-                             'WHERE protocols.id_user=' . self::Escape($userId));
+    static public function GetProtocolCaloriesForUser($userId, $date=null): int {
+        $query = 'SELECT *, SUM(foods.kcal * protocols.amount / 100) AS real_kcal FROM protocols ' .
+                 'LEFT JOIN foods ON protocols.id_food = foods.id ' .
+                 'WHERE protocols.id_user=' . self::Escape($userId) . ' ';
+
+        if ($date !== null)
+            $query .= 'AND protocols.date = "' . self::Escape($date) . '" ';
+
+        $rows = self::Select($query);
 
         return $rows[0]['real_kcal'] ?? 0;
     }
 
-    static public function GetProtocolNutrientsForUser($userId): array {
+    static public function GetProtocolNutrientsForUser($userId, $date=null): array {
         $user = self::GetUser($userId);
-        return self::Select('SELECT *, SUM(ROUND(food_nutrients.amount *(protocols.amount / 100),3)) AS real_amount FROM protocols ' .
-                            'LEFT JOIN foods ON protocols.id_food = foods.id ' .
-                            'RIGHT JOIN food_nutrients ON food_nutrients.id_food = foods.id ' .
-                            'RIGHT JOIN nutrients ON nutrients.id = food_nutrients.id_nutrient ' .
-                            'LEFT JOIN rdas ON rdas.id_nutrient = nutrients.id ' .
-                            'WHERE protocols.id_user=' . self::Escape($userId) . ' ' .
-                            'AND rdas.id_profile=' . self::Escape($user['id_profile']) . ' ' .
-                            'GROUP BY nutrients.name');
+        $query = 'SELECT *, SUM(ROUND(food_nutrients.amount *(protocols.amount / 100),3)) AS real_amount FROM protocols ' .
+                 'LEFT JOIN foods ON protocols.id_food = foods.id ' .
+                 'RIGHT JOIN food_nutrients ON food_nutrients.id_food = foods.id ' .
+                 'RIGHT JOIN nutrients ON nutrients.id = food_nutrients.id_nutrient ' .
+                 'LEFT JOIN rdas ON rdas.id_nutrient = nutrients.id ' .
+                 'WHERE protocols.id_user=' . self::Escape($userId) . ' ' .
+                 'AND rdas.id_profile=' . self::Escape($user['id_profile']) . ' ';
+
+        if ($date != null)
+            $query .= 'AND protocols.date = "' . self::Escape($date) . '" ';
+
+        $query .= 'GROUP BY nutrients.name';
+        return self::Select($query);
+    }
+
+    static public function GetProtocolLatestDateForUser($userId): string {
+        $rows = self::Select('SELECT MAX(date) AS max_date FROM protocols WHERE id_user=' . self::Escape($userId));
+        return $rows[0]['max_date'] ?? date('Y-m-d');
     }
 
     static public function GetRDA($profileId, $nutrientId): ?array {
