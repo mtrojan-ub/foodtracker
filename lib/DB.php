@@ -27,6 +27,14 @@ class DB {
         }
     }
 
+    static protected function SelectSingleColumn($query, $columnName): array {
+        $values = [];
+        $rows = self::Select($query);
+        foreach ($rows as $row)
+            $values[] = $row[$columnName];
+        return $values;
+    }
+
     static public function GetFood($id): array {
         return self::Select('SELECT * FROM foods WHERE id=' . self::Escape($id))[0];
     }
@@ -77,6 +85,10 @@ class DB {
         return $rows[0]['real_kcal'] ?? 0;
     }
 
+    static public function GetProtocolDatesForUser($userId) {
+        return self::SelectSingleColumn('SELECT DISTINCT date FROM protocols WHERE id_user=' . self::Escape($userId) . ' ORDER BY date ASC', 'date');
+    }
+
     static public function GetProtocolNutrientsForUser($userId, $date=null): array {
         $user = self::GetUser($userId);
         $query = 'SELECT *, SUM(ROUND(food_nutrients.amount *(protocols.amount / 100),3)) AS real_amount FROM protocols ' .
@@ -92,11 +104,6 @@ class DB {
 
         $query .= 'GROUP BY nutrients.name';
         return self::Select($query);
-    }
-
-    static public function GetProtocolLatestDateForUser($userId): string {
-        $rows = self::Select('SELECT MAX(date) AS max_date FROM protocols WHERE id_user=' . self::Escape($userId));
-        return $rows[0]['max_date'] ?? date('Y-m-d');
     }
 
     static public function GetRDA($profileId, $nutrientId): ?array {

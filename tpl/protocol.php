@@ -1,18 +1,26 @@
 <?php
 namespace Foodtracker;
 $user = DB::GetUser(1);
-$date = $_GET['date'] ?? DB::GetProtocolLatestDateForUser($user['id']);
-$protocols = DB::GetProtocolForUser($user['id'], $date);
-$calories = DB::GetProtocolCaloriesForUser($user['id'], $date);
-$nutrients = DB::GetProtocolNutrientsForUser($user['id'], $date);
+$today = date('Y-m-d');
+$dateSelected = $_GET['date'] ?? $today;
+$dates = DB::GetProtocolDatesForUser($user['id']);
+if (!in_array($today, $dates))
+    $dates[] = $today;
+$protocols = DB::GetProtocolForUser($user['id'], $dateSelected);
+$calories = DB::GetProtocolCaloriesForUser($user['id'], $dateSelected);
+$nutrients = DB::GetProtocolNutrientsForUser($user['id'], $dateSelected);
 
 ?>
 
 <h1>Protocol</h1>
-<form method="get">
-    <input type="hidden" name="page" value="protocol">
-    Date:&nbsp;<input name="date" value="<?=$date?>"><input type="submit">
-</form>
+<?php foreach ($dates as $date):?>
+    <?php $dateLabel = ($date == $today) ? 'today' : $date?>
+    <?php if ($date != $dateSelected): ?>
+        <a href="?page=protocol&date=<?=urlencode($date)?>"><?=$dateLabel?></a>
+    <?php else: ?>
+        <b><?=$dateLabel?></b>
+    <?php endif; ?>
+<?php endforeach; ?>
 
 <h2>Foods</h2>
 <table class="table">
