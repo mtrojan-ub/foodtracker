@@ -42,10 +42,20 @@ class DB {
         return $values;
     }
 
-    static public function AddProtocolEntry($id_user, $id_food, $amout, $date, $time) {
-        $values = self::Escape([$id_user, $id_food, $amout, $date, $time]);
+    static public function AddFood($name, $kcal, $amountDefault, $unitDefault) {
+        $values = self::Escape([$name, $kcal, $amountDefault, $unitDefault]);
+        return self::Query('INSERT INTO foods (name, kcal, amount_default, unit_default) ' .
+                           'VALUES ("' . implode('","', $values) . '")');
+    }
+
+    static public function AddProtocolEntry($userId, $foodId, $amout, $date, $time) {
+        $values = self::Escape([$userId, $foodId, $amout, $date, $time]);
         return self::Query('INSERT INTO protocols (id_user, id_food, amount, date, time) ' .
                            'VALUES ("' . implode('","', $values) . '")');
+    }
+
+    static public function DeleteFood($id) {
+        return self::Query('DELETE FROM foods WHERE id=' . self::Escape($id));
     }
 
     static public function DeleteProtocolEntry($id) {
@@ -141,5 +151,10 @@ class DB {
                              'WHERE users.login="' . self::Escape($username) . '" ' .
                              'AND users.password="' . self::Escape(md5($password)) . '"');
         return $rows[0] ?? null;
+    }
+
+    static public function IsFoodInProtocol($foodId): bool {
+        $rows = self::Select('SELECT count(*) AS count FROM protocols WHERE id_food=' . self::Escape($foodId));
+        return $rows[0]['count'] > 0;
     }
 }
