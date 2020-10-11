@@ -26,6 +26,16 @@ class ViewHelper {
         return $foodSelect;
     }
 
+    static public function GetNutrientSelect(): string {
+        $nutrientSelect = '<select name="id_nutrient">';
+        $nutrients = DB::GetNutrients();
+        foreach($nutrients as $nutrient) {
+            $nutrientSelect .= '<option value="' . htmlspecialchars($nutrient['id']) . '">' . htmlspecialchars($nutrient['name']) . ' (' . htmlspecialchars($nutrient['unit']) .  ')</option>';
+        }
+        $nutrientSelect .= '</select>';
+        return $nutrientSelect;
+    }
+
     static public function GetLoginResultMessage(): string {
         return $_SESSION['login_result_message'] ?? '';
     }

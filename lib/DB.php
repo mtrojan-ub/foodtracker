@@ -48,6 +48,12 @@ class DB {
                            'VALUES ("' . implode('","', $values) . '")');
     }
 
+    static public function AddFoodNutrient($foodId, $nutrientId, $amount) {
+        $values = self::Escape([$foodId, $nutrientId, $amount]);
+        return self::Query('INSERT INTO food_nutrients (id_food, id_nutrient, amount) ' .
+                           'VALUES ("' . implode('","', $values) . '")');
+    }
+
     static public function AddProtocolEntry($userId, $foodId, $amout, $date, $time) {
         $values = self::Escape([$userId, $foodId, $amout, $date, $time]);
         return self::Query('INSERT INTO protocols (id_user, id_food, amount, date, time) ' .
@@ -56,6 +62,10 @@ class DB {
 
     static public function DeleteFood($id) {
         return self::Query('DELETE FROM foods WHERE id=' . self::Escape($id));
+    }
+
+    static public function DeleteFoodNutrient($id) {
+        return self::Query('DELETE FROM food_nutrients WHERE id=' . self::Escape($id));
     }
 
     static public function DeleteProtocolEntry($id) {
@@ -75,7 +85,7 @@ class DB {
     }
 
     static public function GetFoodNutrients($foodId): array {
-        $query = 'SELECT * FROM foods '
+        $query = 'SELECT *, food_nutrients.id AS id_food_nutrient FROM foods '
                . 'LEFT JOIN food_nutrients ON foods.id = food_nutrients.id_food '
                . 'LEFT JOIN nutrients ON nutrients.id = food_nutrients.id_nutrient '
                . 'WHERE foods.id=' . self::Escape($foodId) . ' '
