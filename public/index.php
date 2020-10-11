@@ -1,6 +1,18 @@
 <?php
+
 namespace foodtracker;
+
 require('../inc.php');
+
+session_start();
+
+// Login/logout actions must be processed before rendering the menu
+if (ViewHelper::IsLoggedIn()) {
+    ViewHelper::ProcessLogout();
+} else {
+    ViewHelper::ProcessLogin();
+}
+
 ?>
 
 <html>
@@ -41,6 +53,9 @@ require('../inc.php');
                             <a class="dropdown-item" href="?page=nutrients_per_profile">Nutrients per Profile</a>
                         </div>
                     </li>
+                    <?php if (ViewHelper::IsLoggedIn()): ?>
+                        <li class="nav-item"><a class="nav-link" href="?logout=true">Logout</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </nav>

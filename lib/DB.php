@@ -123,7 +123,7 @@ class DB {
         $rows = self::Select('SELECT * FROM users ' .
                              'LEFT JOIN profiles ON users.id_profile = profiles.id ' .
                              'WHERE users.login="' . self::Escape($username) . '" ' .
-                             'AND users.password="' . self::Escape($password) . '"');
+                             'AND users.password="' . self::Escape(md5($password)) . '"');
         return $rows[0] ?? null;
     }
 }

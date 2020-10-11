@@ -2,24 +2,10 @@
 
 namespace Foodtracker;
 
-$username = $_POST['username'] ?? null;
-$password = $_POST['password'] ?? null;
-$message = '';
-
-if ($username != '' && $password != '') {
-    $user = DB::GetUserByLogin($username, $password);
-    if ($user !== null) {
-        ViewHelper::SetUser($user);
-        return;
-    }
-    else
-        $message = 'Wrong username or password, try again!';
-}
-
 ?>
 
 <h1>Login</h1>
-<p style="color: red;"><?=$message?></p>
+<p style="color: red;"><?=ViewHelper::GetLoginResultMessage()?></p>
 <form method="post" action="?page=<?=ViewHelper::GetCurrentPage()?>">
     <div class="form-group">
         <label for="username">Username</label>
