@@ -118,4 +118,12 @@ class DB {
                             'LEFT JOIN profiles ON users.id_profile = profiles.id ' .
                             'WHERE users.id=' . self::Escape($userId))[0];
     }
+
+    static public function GetUserByLogin($username, $password): ?array {
+        $rows = self::Select('SELECT * FROM users ' .
+                             'LEFT JOIN profiles ON users.id_profile = profiles.id ' .
+                             'WHERE users.login="' . self::Escape($username) . '" ' .
+                             'AND users.password="' . self::Escape($password) . '"');
+        return $rows[0] ?? null;
+    }
 }

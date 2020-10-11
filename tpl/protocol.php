@@ -1,6 +1,8 @@
 <?php
+
 namespace Foodtracker;
-$user = DB::GetUser(1);
+
+$user = ViewHelper::ForceLogin();
 $today = date('Y-m-d');
 $dateSelected = $_GET['date'] ?? $today;
 $dates = DB::GetProtocolDatesForUser($user['id']);

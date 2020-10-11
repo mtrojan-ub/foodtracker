@@ -47,7 +47,7 @@ require('../inc.php');
 
         <div class="container-fluid">
             <?php
-            $page = $_GET['page'] ?? 'home';
+            $page = ViewHelper::GetCurrentPage();
 
             if (!empty($page))
                 require('../tpl/' . $page . '.php');
