@@ -10,4 +10,14 @@ class ViewHelper {
         $caption .= ($nutrient['external_id_netdoktor'] != '') ? '</a>' : '';
         return $caption;
     }
+
+    static public function GetFoodSelect(): string {
+        $foodSelect = '<select name="food">';
+        $foods = DB::GetFoods();
+        foreach ($foods as $food)
+            $foodSelect .= '<option value="' . htmlspecialchars($food['id']) . '">' . htmlspecialchars($food['name']) . '</option>';
+
+        $foodSelect .= '</select>';
+        return $foodSelect;
+    }
 }

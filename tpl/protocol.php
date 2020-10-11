@@ -24,22 +24,38 @@ $nutrients = DB::GetProtocolNutrientsForUser($user['id'], $dateSelected);
 
 <h2>Foods</h2>
 <table class="table">
-    <tr>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Food</th>
-        <th>Amount</th>
-        <th>kcal</th>
-    </tr>
-    <?php foreach ($protocols as $protocol):?>
-    <tr>
-        <td><?=$protocol['date']?></td>
-        <td><?=$protocol['time']?></td>
-        <td><a href="?page=food_nutrients&id=<?=$protocol['id']?>"><?=$protocol['name']?></a></td>
-        <td><?=$protocol['amount'] . $protocol['unit_default']?></td>
-        <td><?=round($protocol['real_kcal'])?></td>
-    </tr>
-    <?php endforeach; ?>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Food</th>
+            <th>Amount</th>
+            <th>kcal</th>
+            <th>action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($protocols as $protocol):?>
+        <tr>
+            <td><?=$protocol['date']?></td>
+            <td><?=$protocol['time']?></td>
+            <td><a href="?page=food_nutrients&id=<?=$protocol['id']?>"><?=$protocol['name']?></a></td>
+            <td><?=$protocol['amount'] . $protocol['unit_default']?></td>
+            <td><?=round($protocol['real_kcal'])?></td>
+            <td><button>delete</button></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><?=$dateSelected?></td>
+            <td><input name="time" value="07:00:00" required="required" pattern="\d{2}:\d{2}:\d{2}"></td>
+            <td><?=ViewHelper::GetFoodSelect()?></td>
+            <td><input name="amount" value="100" required="required" pattern="\d+"></td>
+            <td></td>
+            <td><button>add</button></td>
+        </tr>
+    </tfoot>
 </table>
 
 <h2>Nutrients</h2>
