@@ -17,7 +17,7 @@ class ViewHelper {
     }
 
     static public function GetFoodSelect(): string {
-        $foodSelect = '<select name="food">';
+        $foodSelect = '<select name="id_food">';
         $foods = DB::GetFoods();
         foreach ($foods as $food)
             $foodSelect .= '<option value="' . htmlspecialchars($food['id']) . '">' . htmlspecialchars($food['name']) . '</option>';

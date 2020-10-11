@@ -10,12 +10,18 @@ class DB {
         return $GLOBALS['mysqli'];
     }
 
-    static protected function Query($query): \mysqli_result {
+    static protected function Query($query) {
         return self::GetConnection()->query($query);
     }
 
     static protected function Escape($param) {
-        return self::GetConnection()->real_escape_string($param);
+        if (is_array($param)) {
+            $params = [];
+            foreach ($param as $paramEntry)
+                $params[] = self::GetConnection()->real_escape_string($paramEntry);
+            return $params;
+        } else
+            return self::GetConnection()->real_escape_string($param);
     }
 
     static protected function Select($query): array {
@@ -34,6 +40,16 @@ class DB {
         foreach ($rows as $row)
             $values[] = $row[$columnName];
         return $values;
+    }
+
+    static public function AddProtocolEntry($id_user, $id_food, $amout, $date, $time) {
+        $values = self::Escape([$id_user, $id_food, $amout, $date, $time]);
+        return self::Query('INSERT INTO protocols (id_user, id_food, amount, date, time) ' .
+                           'VALUES ("' . implode('","', $values) . '")');
+    }
+
+    static public function DeleteProtocolEntry($id) {
+        return self::Query('DELETE FROM protocols WHERE id=' . self::Escape($id));
     }
 
     static public function GetFood($id): array {
@@ -62,8 +78,8 @@ class DB {
     }
 
     static public function GetProtocolForUser($userId, $date=null): array {
-        $query = 'SELECT *, foods.kcal * protocols.amount / 100 AS real_kcal FROM protocols ' .
-                 'LEFT JOIN foods ON foods.id=protocols.id_food ' .
+        $query = 'SELECT *, foods.kcal * protocols.amount / 100 AS real_kcal, protocols.id AS id_protocol ' .
+                 'FROM protocols LEFT JOIN foods ON foods.id=protocols.id_food ' .
                  'WHERE id_user=' . self::Escape($userId) . ' ';
 
         if ($date !== null)

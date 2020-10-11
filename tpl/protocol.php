@@ -3,6 +3,21 @@
 namespace Foodtracker;
 
 $user = ViewHelper::ForceLogin();
+
+
+// Process actions
+$action = $_POST['action'] ?? null;
+switch($action) {
+    case 'delete_protocol_entry':
+        DB::DeleteProtocolEntry($_POST['id']);
+        break;
+    case 'add_protocol_entry':
+        DB::AddProtocolEntry($user['id'], $_POST['id_food'], $_POST['amount'], $_POST['date'], $_POST['time']);
+        break;
+}
+
+
+// Get view information
 $today = date('Y-m-d');
 $dateSelected = $_GET['date'] ?? $today;
 $dates = DB::GetProtocolDatesForUser($user['id']);
@@ -41,21 +56,30 @@ $nutrients = DB::GetProtocolNutrientsForUser($user['id'], $dateSelected);
         <tr>
             <td><?=$protocol['date']?></td>
             <td><?=$protocol['time']?></td>
-            <td><a href="?page=food_nutrients&id=<?=$protocol['id']?>"><?=$protocol['name']?></a></td>
+            <td><a href="?page=food_nutrients&id=<?=$protocol['id']?>"><?=htmlspecialchars($protocol['name'])?></a></td>
             <td><?=$protocol['amount'] . $protocol['unit_default']?></td>
             <td><?=round($protocol['real_kcal'])?></td>
-            <td><button>delete</button></td>
+            <td>
+                <form action="?page=<?=urlencode(ViewHelper::GetCurrentPage())?>" method="post">
+                    <input type="hidden" name="action" value="delete_protocol_entry">
+                    <input type="hidden" name="id" value="<?=$protocol['id_protocol']?>">
+                    <button type="submit" class="btn btn-primary">delete</button>
+                </form>
+            </td>
         </tr>
         <?php endforeach; ?>
     </tbody>
     <tfoot>
         <tr>
-            <td><?=$dateSelected?></td>
-            <td><input name="time" value="07:00:00" required="required" pattern="\d{2}:\d{2}:\d{2}"></td>
-            <td><?=ViewHelper::GetFoodSelect()?></td>
-            <td><input name="amount" value="100" required="required" pattern="\d+"></td>
-            <td></td>
-            <td><button>add</button></td>
+            <form action="?page=<?=urlencode(ViewHelper::GetCurrentPage())?>" method="post">
+                <input type="hidden" name="action" value="add_protocol_entry">
+                <td><input name="date" value="<?=$dateSelected?>" readonly="readonly"></td>
+                <td><input name="time" value="07:00:00" required="required" pattern="\d{2}:\d{2}:\d{2}"></td>
+                <td><?=ViewHelper::GetFoodSelect()?></td>
+                <td><input name="amount" value="100" required="required" pattern="\d+"></td>
+                <td></td>
+                <td><button type="submit" class="btn btn-primary">add</button></td>
+            </form>
         </tr>
     </tfoot>
 </table>
