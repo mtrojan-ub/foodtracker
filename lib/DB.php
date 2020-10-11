@@ -3,9 +3,10 @@
 namespace Foodtracker;
 
 class DB {
+
     static protected function GetConnection() {
         if (!isset($GLOBALS['mysqli']))
-            $GLOBALS['mysqli'] = new \mysqli('localhost', 'root', '', 'foodtracker');
+            $GLOBALS['mysqli'] = new \mysqli(FOODTRACKER_DB_HOST, FOODTRACKER_DB_USERNAME, FOODTRACKER_DB_PASSWORD, FOODTRACKER_DB_DATABASE);
         return $GLOBALS['mysqli'];
     }
 
